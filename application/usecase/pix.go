@@ -1,6 +1,6 @@
 package usecase
 
-import "github.com/Fabricio1805/imersaoFullCycle/codePix-go/src/domain/model"
+import "github.com/Fabricio1805/imersaoFullCycle/codePix-go/domain/model"
 
 type PixUseCase struct {
 	PixKeyRepository model.PixKeyRepositoryInterface
@@ -24,6 +24,7 @@ func (p *PixUseCase) RegisterKey(key string, kind string, accountId string) (*mo
 	if pixKey.ID == "" {
 		return nil, err
 	}
+
 	return pixKey, nil
 }
 

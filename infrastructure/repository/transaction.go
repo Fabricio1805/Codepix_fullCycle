@@ -3,7 +3,7 @@ package repository
 import (
 	"fmt"
 
-	"github.com/Fabricio1805/imersaoFullCycle/codePix-go/src/domain/model"
+	"github.com/Fabricio1805/imersaoFullCycle/codePix-go/domain/model"
 	"github.com/jinzhu/gorm"
 )
 

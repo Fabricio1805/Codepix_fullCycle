@@ -4,7 +4,7 @@ import (
 	"errors"
 	"log"
 
-	"github.com/Fabricio1805/imersaoFullCycle/codePix-go/src/domain/model"
+	"github.com/Fabricio1805/imersaoFullCycle/codePix-go/domain/model"
 )
 
 

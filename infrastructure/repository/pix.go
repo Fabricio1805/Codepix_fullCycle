@@ -3,7 +3,7 @@ package repository
 import (
 	"fmt"
 
-	"github.com/Fabricio1805/imersaoFullCycle/codePix-go/src/domain/model"
+	"github.com/Fabricio1805/imersaoFullCycle/codePix-go/domain/model"
 	"github.com/jinzhu/gorm"
 )
 
@@ -61,7 +61,7 @@ func (r *PixKeyRepositoryDb) FindAccount(id string ) (*model.Account, error) {
 	r.Db.Preload("Bank").First(&account, "id = ?", id)
 
 	if account.ID == "" {
-		return nil, fmt.Errorf("no key was found")
+		return nil, fmt.Errorf("no account found")
 	}
 
 	return &account, nil
