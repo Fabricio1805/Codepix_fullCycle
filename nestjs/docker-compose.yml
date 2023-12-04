@@ -2,6 +2,7 @@ version: '3'
 
 services:
   app:
+    container_name: app
     build: .
     ports:
       - 3000:3000
@@ -9,6 +10,7 @@ services:
       - .:/home/node/app
   db: 
     image: postgres:13-alpine
+    container_name: db
     environment:
       POSTGRES_PASSWORD: root
       POSTGRES_DB: nest

@@ -1,6 +1,8 @@
 FROM node:20-slim
 
-RUN apt update -y && apt install procps && npm install -g @nestjs/cli@10.0.0 
+RUN apt-get update && apt-get install -y procps
+
+RUN npm install -g @nestjs/cli@10.0.0
 
 WORKDIR /home/node/app
 
