@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'pix_keys' })
-export class PixKey {
+export class PixKeyEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 }

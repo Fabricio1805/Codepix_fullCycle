@@ -2,15 +2,15 @@ version: '3'
 
 services:
   app:
-    container_name: app
+    container_name: app_nestjs_code_pix
     build: .
     ports:
       - 3000:3000
     volumes:
       - .:/home/node/app
   db: 
-    image: postgres:13-alpine
-    container_name: db
+    image: postgres:15-alpine
+    container_name: db_code_pix
     environment:
       POSTGRES_PASSWORD: root
-      POSTGRES_DB: nest
+      POSTGRES_DB: code_pix

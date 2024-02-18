@@ -2,6 +2,10 @@ GET http://localhost:3000/bank-accounts
 
 
 ###
+GET http://localhost:3000/bank-accounts/74330b3d-dc9f-4340-8d0b-1c475388f972
+
+
+###
 POST http://localhost:3000/bank-accounts
 Content-Type: application/json
 

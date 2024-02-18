@@ -1,26 +1,33 @@
 import { Injectable } from '@nestjs/common';
 import { CreateBankAccountDto } from './dto/create-bank-account.dto';
 import { Repository } from 'typeorm';
-import { BankAccount } from './entities/bank-account.entity';
+import { BankAccountEntity } from './entities/bank-account.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class BankAccountsService {
   constructor(
-    @InjectRepository(BankAccount)
-    private readonly bankAccountRepository: Repository<BankAccount>,
+    @InjectRepository(BankAccountEntity)
+    private readonly BankAccountEntityRepository: Repository<BankAccountEntity>,
   ) {}
 
-  async create(createBankAccountDto: CreateBankAccountDto) {
-    return await this.bankAccountRepository.save(createBankAccountDto);
+  async create(
+    createBankAccountEntityDto: CreateBankAccountDto,
+  ): Promise<BankAccountEntity> {
+    const bank_account = await this.BankAccountEntityRepository.save(
+      createBankAccountEntityDto,
+    );
+
+    return bank_account;
   }
 
-  async findAll() {
-    return await this.bankAccountRepository.find();
+  async findAll(): Promise<BankAccountEntity[]> {
+    const bank_accounts = await this.BankAccountEntityRepository.find();
+    return bank_accounts;
   }
 
-  async findOne(id: string) {
-    return await this.bankAccountRepository.findOneOrFail({
+  async findOne(id: string): Promise<BankAccountEntity> {
+    return await this.BankAccountEntityRepository.findOneOrFail({
       where: {
         id,
       },
