@@ -14,3 +14,16 @@ Content-Type: application/json
   "owner_name": "John Doe"
 }
 
+
+###
+POST http://localhost:3000/bank-accounts/74330b3d-dc9f-4340-8d0b-1c475388f972/pix-keys
+Content-Type: application/json
+
+{
+  "key": "email",
+  "kind": "user@email.com"
+}
+
+
+###
+GET http://localhost:3000/bank-accounts/74330b3d-dc9f-4340-8d0b-1c475388f972/pix-keys
