@@ -19,7 +19,7 @@ export class PixKeyEntity {
   id: string;
 
   @Column()
-  kind: string;
+  kind: PixKeyKind;
 
   @Column({ unique: true })
   key: string;

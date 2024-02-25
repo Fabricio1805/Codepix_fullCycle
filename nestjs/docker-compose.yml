@@ -8,7 +8,9 @@ services:
       - 3000:3000
     volumes:
       - .:/home/node/app
-  db: 
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+  db:
     image: postgres:15-alpine
     container_name: db_code_pix
     environment:

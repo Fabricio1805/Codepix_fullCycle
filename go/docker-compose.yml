@@ -8,7 +8,7 @@ services:
     volumes:
       - .:/go/src/
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - "host.docker.internal:172.17.0.1"
 
   db:
     image: postgres:13-alpine
@@ -20,7 +20,7 @@ services:
       - POSTGRES_PASSWORD=root
       - POSTGRES_DB=codepix
     ports:
-      - "5432:5432"
+      - "5434:5432"
 
   pgadmin:
     image: dpage/pgadmin4:7.6
@@ -54,7 +54,7 @@ services:
       KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,OUTSIDE://host.docker.internal:9094
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - "host.docker.internal:172.17.0.1"
 
   control-center:
     image: confluentinc/cp-enterprise-control-center:latest

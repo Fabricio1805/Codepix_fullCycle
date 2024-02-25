@@ -1,8 +1,8 @@
 GET http://localhost:3000/bank-accounts
 
-
+@bank_account_id=1c22526d-5260-456f-a157-4b48790657e3
 ###
-GET http://localhost:3000/bank-accounts/74330b3d-dc9f-4340-8d0b-1c475388f972
+GET http://localhost:3000/bank-accounts/{{bank_account_id}}
 
 
 ###
@@ -16,14 +16,15 @@ Content-Type: application/json
 
 
 ###
-POST http://localhost:3000/bank-accounts/74330b3d-dc9f-4340-8d0b-1c475388f972/pix-keys
+POST http://localhost:3000/bank-accounts/{{bank_account_id}}/pix-keys
 Content-Type: application/json
 
 {
-  "key": "email",
-  "kind": "user@email.com"
+  "key": "t@email.com",
+  "kind": "email"
 }
 
 
 ###
-GET http://localhost:3000/bank-accounts/74330b3d-dc9f-4340-8d0b-1c475388f972/pix-keys
+GET http://localhost:3000/bank-accounts/{{bank_account_id}}/pix-keys
+
