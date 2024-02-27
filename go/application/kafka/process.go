@@ -12,25 +12,24 @@ import (
 	"github.com/Fabricio1805/imersaoFullCycle/codePix-go/application/usecase"
 	"github.com/Fabricio1805/imersaoFullCycle/codePix-go/domain/model"
 )
-
 type KafkaProcessor struct {
-	Database *gorm.DB
-	Producer *ckafka.Producer
+	Database     *gorm.DB
+	Producer     *ckafka.Producer
 	DeliveryChan chan ckafka.Event
 }
 
-func NewKafkaProcessor(database *gorm.DB, producer *ckafka.Producer, deliveryChan chan ckafka.Event) *KafkaProcessor { 
+func NewKafkaProcessor(database *gorm.DB, producer *ckafka.Producer, deliveryChan chan ckafka.Event) *KafkaProcessor {
 	return &KafkaProcessor{
-		Database: database,
-		Producer: producer,
+		Database:     database,
+		Producer:     producer,
 		DeliveryChan: deliveryChan,
 	}
 }
 
-func (k *KafkaProcessor) Consume(){
+func (k *KafkaProcessor) Consume() {
 	configMap := &ckafka.ConfigMap{
 		"bootstrap.servers": os.Getenv("kafkaBootstrapServers"),
-		"group.id": os.Getenv("kafkaConsumerGroupId"),
+		"group.id":          os.Getenv("kafkaConsumerGroupId"),
 		"auto.offset.reset": "earliest",
 	}
 	c, err := ckafka.NewConsumer(configMap)
@@ -42,13 +41,12 @@ func (k *KafkaProcessor) Consume(){
 	topics := []string{os.Getenv("kafkaTransactionTopic"), os.Getenv("kafkaTransactionConfirmationTopic")}
 	c.SubscribeTopics(topics, nil)
 
-
 	fmt.Println("kafka consumer has been started")
 	for {
 		msg, err := c.ReadMessage(-1)
 		if err == nil {
-			k.processMessage(msg)
 			fmt.Println(string(msg.Value))
+			k.processMessage(msg)
 		}
 	}
 }
@@ -60,17 +58,16 @@ func (k *KafkaProcessor) processMessage(msg *ckafka.Message) {
 	switch topic := *msg.TopicPartition.Topic; topic {
 	case transactionsTopic:
 		k.processTransaction(msg)
-	case	transactionConfirmationTopic:
+	case transactionConfirmationTopic:
 		k.processTransactionConfirmation(msg)
-	default: 
-	fmt.Println("not a valid topic", string(msg.Value))
-	
+	default:
+		fmt.Println("not a valid topic", string(msg.Value))
 	}
 }
 
 func (k *KafkaProcessor) processTransaction(msg *ckafka.Message) error {
-	trnsaction := appmodel.NewTransaction()
-	err := trnsaction.ParseJson(msg.Value)
+	transaction := appmodel.NewTransaction()
+	err := transaction.ParseJson(msg.Value)
 	if err != nil {
 		return err
 	}
@@ -78,51 +75,50 @@ func (k *KafkaProcessor) processTransaction(msg *ckafka.Message) error {
 	transactionUseCase := factory.TransactionUseCaseFactory(k.Database)
 
 	createdTransaction, err := transactionUseCase.Register(
-		trnsaction.AccountID,
-		trnsaction.Amount,
-		trnsaction.PixKeyTo,
-		trnsaction.PixkeyKindTo,
-		trnsaction.Description,
+		transaction.AccountID,
+		transaction.Amount,
+		transaction.PixKeyTo,
+		transaction.PixkeyKindTo,
+		transaction.Description,
+		transaction.ID,
 	)
-
 	if err != nil {
-		fmt.Println("error registering transaction ", err)
+		fmt.Println("error registering transaction", err)
 		return err
 	}
 
-	topic := "bank"+createdTransaction.PixKeyTo.Account.Bank.Code
-	trnsaction.ID = createdTransaction.ID
-	trnsaction.Status = model.TransactionPending
+	topic := "bank" + createdTransaction.PixKeyTo.Account.Bank.Code
+	transaction.ID = createdTransaction.ID
+	transaction.Status = model.TransactionPending
+	transactionJson, err := transaction.ToJson()
 
-	transactionJson, err := trnsaction.ToJson()
 	if err != nil {
 		return err
 	}
 
 	err = Publish(string(transactionJson), topic, k.Producer, k.DeliveryChan)
-	if err != nil { 
+	if err != nil {
 		return err
 	}
-
 	return nil
 }
 
 func (k *KafkaProcessor) processTransactionConfirmation(msg *ckafka.Message) error {
-	trnsaction := appmodel.NewTransaction()
-	err := trnsaction.ParseJson(msg.Value)
+	transaction := appmodel.NewTransaction()
+	err := transaction.ParseJson(msg.Value)
 	if err != nil {
 		return err
 	}
 
 	transactionUseCase := factory.TransactionUseCaseFactory(k.Database)
 
-	if trnsaction.Status == model.TransactionConfirmed {
-		err = k.confirmTranction(trnsaction, transactionUseCase)
+	if transaction.Status == model.TransactionConfirmed {
+		err = k.confirmTransaction(transaction, transactionUseCase)
 		if err != nil {
 			return err
 		}
-	}else if trnsaction.Status == model.TransactionCompleted {
-		_, err = transactionUseCase.Complete(trnsaction.ID)
+	} else if transaction.Status == model.TransactionCompleted {
+		_, err := transactionUseCase.Complete(transaction.ID)
 		if err != nil {
 			return err
 		}
@@ -131,27 +127,21 @@ func (k *KafkaProcessor) processTransactionConfirmation(msg *ckafka.Message) err
 	return nil
 }
 
-
-func (k *KafkaProcessor) confirmTranction(transaction *appmodel.Transaction, transactionUsecase usecase.TransactionUseCase) error {
-	confirmedTransaction, err := transactionUsecase.Confirm(transaction.ID)
-
+func (k *KafkaProcessor) confirmTransaction(transaction *appmodel.Transaction, transactionUseCase usecase.TransactionUseCase) error {
+	confirmedTransaction, err := transactionUseCase.Confirm(transaction.ID)
 	if err != nil {
 		return err
 	}
 
 	topic := "bank" + confirmedTransaction.AccountFrom.Bank.Code
-
-	trnsactionJson, err := transaction.ToJson()
-
+	transactionJson, err := transaction.ToJson()
 	if err != nil {
 		return err
 	}
 
-	err = Publish(string(trnsactionJson), topic, k.Producer, k.DeliveryChan)
+	err = Publish(string(transactionJson), topic, k.Producer, k.DeliveryChan)
 	if err != nil {
 		return err
 	}
-
-
 	return nil
 }

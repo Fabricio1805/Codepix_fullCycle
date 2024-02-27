@@ -2,10 +2,14 @@ package model
 
 import (
 	"time"
-	"fmt"
+
 	"github.com/asaskevich/govalidator"
 	uuid "github.com/satori/go.uuid"
 )
+
+func init() {
+	govalidator.SetFieldsRequiredByDefault(true)
+}
 
 type Bank struct {
 	Base     `valid:"required"`
@@ -16,11 +20,9 @@ type Bank struct {
 
 func (bank *Bank) isValid() error {
 	_, err := govalidator.ValidateStruct(bank)
-
 	if err != nil {
 		return err
 	}
-
 	return nil
 }
 
@@ -29,17 +31,11 @@ func NewBank(code string, name string) (*Bank, error) {
 		Code: code,
 		Name: name,
 	}
-
 	bank.ID = uuid.NewV4().String()
 	bank.CreatedAt = time.Now()
-
-	fmt.Println(bank)
-
 	err := bank.isValid()
-
 	if err != nil {
 		return nil, err
 	}
-
 	return &bank, nil
 }
