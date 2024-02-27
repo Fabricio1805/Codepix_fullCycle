@@ -8,14 +8,14 @@ import (
 )
 
 type Transaction struct {
-	ID  string `json:"id" validate:"required, uuid4"`
-	AccountID string `json:"accountId" validate:"required, uuid4"`
-	Amount float64 `json:"amount" validate:"required, numeric"`
-	PixKeyTo string `json:"pixKeyTo" validate:"required"`
-	PixkeyKindTo string `json:"pixKeyKindTo" validate:"required"`
-	Description string `json:"description" validate:"required"`
-	Status string `json:"status" validate:"required"`
-	Error string `json:"error" validate:"required"`
+    ID           string  `json:"id" validate:"required,uuid"`
+    AccountID    string  `json:"accountId" validate:"required,uuid"`
+    Amount       float64 `json:"amount" validate:"required,number"`
+    PixKeyTo     string  `json:"pixKeyTo" validate:"required"`
+    PixkeyKindTo string  `json:"pixKeyKindTo" validate:"required"`
+    Description  string  `json:"description" validate:"required"`
+    Status       string  `json:"status" validate:"required"`
+    Error        string  `json:"error" validate:"required"`
 }
 
 func (t *Transaction) isValid() error {

@@ -16,7 +16,7 @@ export class PixKeysService implements OnModuleInit {
     @InjectRepository(PixKeyEntity)
     private readonly pixKeyRepository: Repository<PixKeyEntity>,
     @InjectRepository(BankAccountEntity)
-    private readonly BankAccountEntityRepository: Repository<BankAccountEntity>,
+    private readonly bankAccountEntityRepository: Repository<BankAccountEntity>,
 
     @Inject('PIX_PACKAGE')
     private pixGrpcPackage: ClientGrpc,
@@ -27,7 +27,7 @@ export class PixKeysService implements OnModuleInit {
   }
 
   async create(bankAccountId: string, createPixKeyDto: CreatePixKeyDto) {
-    await this.BankAccountEntityRepository.findOneOrFail({
+    await this.bankAccountEntityRepository.findOneOrFail({
       where: {
         id: bankAccountId,
       },

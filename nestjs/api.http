@@ -28,3 +28,18 @@ Content-Type: application/json
 ###
 GET http://localhost:3000/bank-accounts/{{bank_account_id}}/pix-keys
 
+
+###
+POST http://localhost:3000/bank-accounts/{{bank_account_id}}/transactions
+Content-Type: application/json
+
+{
+  "pix_key_key": "0000",
+  "pix_key_kind": "cpf",
+  "description": "My transaction",
+  "amount": 10.00
+}
+
+
+###
+GET http://localhost:3000/bank-accounts/{{bank_account_id}}/transactions
