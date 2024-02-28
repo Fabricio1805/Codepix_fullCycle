@@ -9,8 +9,8 @@ import {
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { TransactionsService } from './transactions.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { CreateFromAnotherBankAccountDto } from './dto/create-transaction-from-another-bank-account.dto';
 import { ConfirmTransactionDto } from './dto/confirm-transaction.dto';
+import { CreateTransactionFromAnotherBankAccountDto } from './dto/create-transaction-from-another-bank-account.dto';
 
 @Controller('bank-accounts/:bankAccountId/transactions')
 export class TransactionsController {
@@ -31,12 +31,8 @@ export class TransactionsController {
 
   @MessagePattern('bank001')
   async onTransactionProcessedBank001(
-    @Payload(
-      new ValidationPipe({
-        errorHttpStatusCode: 422,
-      }),
-    )
-    message: CreateFromAnotherBankAccountDto | ConfirmTransactionDto,
+    @Payload(new ValidationPipe())
+    message: CreateTransactionFromAnotherBankAccountDto | ConfirmTransactionDto,
   ) {
     if (process.env.BANK_CODE !== '001') return;
     await this.processTransaction(message);
@@ -44,34 +40,29 @@ export class TransactionsController {
 
   @MessagePattern('bank002')
   async onTransactionProcessedBank002(
-    @Payload(
-      new ValidationPipe({
-        errorHttpStatusCode: 422,
-      }),
-    )
-    message: CreateFromAnotherBankAccountDto | ConfirmTransactionDto,
+    @Payload(new ValidationPipe())
+    message: CreateTransactionFromAnotherBankAccountDto | ConfirmTransactionDto,
   ) {
     if (process.env.BANK_CODE !== '002') return;
     await this.processTransaction(message);
   }
 
   async processTransaction(
-    message: CreateFromAnotherBankAccountDto | ConfirmTransactionDto,
+    message: CreateTransactionFromAnotherBankAccountDto | ConfirmTransactionDto,
   ) {
     try {
       if (message.status === 'pending') {
         await this.transactionsService.createFromAnotherBankAccount(
-          message as CreateFromAnotherBankAccountDto,
+          message as CreateTransactionFromAnotherBankAccountDto,
         );
       }
-
       if (message.status === 'confirmed') {
         await this.transactionsService.confirmTransaction(
           message as ConfirmTransactionDto,
         );
       }
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
     }
   }
 }

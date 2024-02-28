@@ -23,7 +23,7 @@ var fixturesCmd = &cobra.Command{
 		pixRepository.AddBank(bankCTER)
 
 		account1, _ := model.NewAccount(bankBBX, "1111", "User BBX 1")
-		account1.ID = "8254b794-3793-429e-bf74-35af166b9454"
+		account1.ID = "6e4635ce-88d1-4e58-9597-d13fc446ee47"
 		pixRepository.AddAccount(account1)
 
 		account2, _ := model.NewAccount(bankBBX, "2222", "User BBX 2")
@@ -31,7 +31,7 @@ var fixturesCmd = &cobra.Command{
 		pixRepository.AddAccount(account2)
 
 		account3, _ := model.NewAccount(bankCTER, "3333", "User CTER 1")
-		account3.ID = "62782236-bb2e-4a8a-ba94-d1aaad621d9f"
+		account3.ID = "103cc632-78e7-4476-ab63-d5ad3a562d26"
 		pixRepository.AddAccount(account3)
 
 		account4, _ := model.NewAccount(bankCTER, "4444", "User CTER 2")

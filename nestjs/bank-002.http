@@ -43,7 +43,7 @@ Content-Type: application/json
 ###
 GET http://localhost:3001/bank-accounts/{{bankAccountId1}}/transactions
 
-### Create a new transaction
+###
 POST http://localhost:3001/bank-accounts/{{bankAccountId1}}/transactions
 Content-Type: application/json
 

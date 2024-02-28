@@ -9,7 +9,7 @@ import {
 } from 'class-validator';
 import { PixKeyKind } from 'src/pix-keys/entities/pix-key.entity';
 
-export class CreateFromAnotherBankAccountDto {
+export class CreateTransactionFromAnotherBankAccountDto {
   @IsNotEmpty()
   @IsUUID()
   id: string;

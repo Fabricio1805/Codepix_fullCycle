@@ -12,7 +12,7 @@ func TransactionUseCaseFactory(database *gorm.DB) usecase.TransactionUseCase {
 
 	transactionUseCase := usecase.TransactionUseCase{
 		TransactionRepository: &transactionRepository,
-		PixRepository: &pixRepository,
+		PixRepository:         pixRepository,
 	}
 
 	return transactionUseCase
