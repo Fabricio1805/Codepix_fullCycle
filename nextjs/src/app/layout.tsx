@@ -1,3 +1,4 @@
+import { NavBar } from "@/components/Navbar/NavBar";
 import ThemeRegistry from "@/components/ThemeRegistry/ThemeRegistry";
 import Box from "@mui/material/Box";
 import type { Metadata } from "next";
@@ -12,7 +13,7 @@ export default function RootLayout(props:  { children: React.ReactNode }) {
     <html lang="en">
       <body>
         <ThemeRegistry>
-          {/*<Navbar />*/}
+          <NavBar />
           <Box
             component="main"
             sx={{
